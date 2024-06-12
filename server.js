@@ -3,22 +3,28 @@ import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 import connectDB from "./database/connectDB.js"
+import productRouter from "./routes/productRoutes.js";
+
+const connectionString = process.env.MONGO_URL;
+
+const port = process.env.PORT;
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("API is running...");
+    res.send("API is running...");
 });
 
+app.use("/products", productRouter);
 const startServer = async () => {
     try {
-        await connectDB(process.env.MONGO_URL);
-        console.log("der server ist mit der Datenbank verbunden!");
+      await connectDB(connectionString);
+      console.log("verbindung mit MONGODB hat geklaptt!");
       //
-      app.listen(process.env.PORT, () => {
-        console.log(`Listining on port 3000`);
+      app.listen(port, () => {
+        console.log(`Port läuft auf Port: ${port}`);
       });
     } catch (error) {
       console.log(error);
