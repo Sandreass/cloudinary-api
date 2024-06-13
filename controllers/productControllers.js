@@ -1,15 +1,15 @@
 import productModel from "../models/productModel.js";
-import { cloudinary } from "../cloudinary/cloudinaryConfig.js";
+import { cloudinary } from "../cloudinary-fullstack/cloudinary/cloudinaryConfig.js";
 
 async function createProduct(req, res) {
-  const { name, description } = req.body;
+  const { name, description, image } = req.body;
 
-
+  //console.log("Raw Bild", image);
 
   const uploadedImage = await cloudinary.uploader.upload(
     image,
     {
-      upload_preset: "products",
+      upload_preset: "andrei",
       public_id: `${name}`,
       allowed_formats: [
         "jpg",
@@ -27,8 +27,9 @@ async function createProduct(req, res) {
     }
   );
 
-  const cloudImg = uploadedImage.secure_url;
+  console.log("Cloudinary Object", uploadedImage);
 
+  const cloudImg = uploadedImage.secure_url;
   const cloudImgPub = uploadedImage.public_id;
 
   try {
@@ -44,13 +45,4 @@ async function createProduct(req, res) {
     res.status(500).json({ message: "Fehler bei der Speicherung" });
   }
 }
-async function getProducts(req, res) {
-  try {
-    const products = await productModel.find({});
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ message: "Fehler beim Abrufen der Produkte" });
-  }
-}
-
-export { createProduct, getProducts };
+export { createProduct };
