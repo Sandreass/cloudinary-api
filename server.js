@@ -7,7 +7,7 @@ import productRouter from "./routes/productRoutes.js";
 
 const connectionString = process.env.MONGO_URL;
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 const app = express();
 app.use(
